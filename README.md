@@ -98,8 +98,6 @@ if __name__ == '__main__':
 
 ## Contributors
 
-- Add your name here if you contribute to the project.
-
 ## License
 
 This Chord implementation is licensed under the [MIT License](LICENSE).
