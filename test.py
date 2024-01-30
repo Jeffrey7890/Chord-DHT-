@@ -9,13 +9,8 @@ class TestChord(unittest.TestCase):
 
         numberOfEntry = len(self.NODES)
         # ... (same setup as before)
-        for i, node in enumerate(self.NODES):
-            for j in range(3):
-                successor = None
-                start = (node.identifier + 2**j) % 2 ** numberOfEntry
-                end = (node.identifier + 2 ** (j+1)) % 2 ** numberOfEntry
-                interval = (start, end)
-                node.fingerTable.append(fingerEntry(start, interval, successor))
+        for node in self.NODES:
+            node.initializeFingetTableStartInterval(numberOfEntry)
         
         successors = [[1, 2, 0], [2, 2, 0], [0, 0, 0]]
 
@@ -31,7 +26,7 @@ class TestChord(unittest.TestCase):
         node = self.NODES[0]
         key = 7
         self.assertTrue(node.isValid((7, 3), key))
-        closest_node = node.findSuccessor(key)
+        closest_node = node.findPredecessor(key)
         self.assertEqual(closest_node.identifier, 0)
 
     def test_findSuccessor_case2(self):
@@ -45,7 +40,7 @@ class TestChord(unittest.TestCase):
         node = self.NODES[2]
         key = 4
         self.assertFalse(node.isValid((0, 1), key))
-        closest_node = node.findSuccessor(key)
+        closest_node = node.closestPrecedingFinger(key)
         self.assertEqual(closest_node.identifier, 0)
 
     def test_findSuccessor_case4(self):
@@ -62,9 +57,17 @@ class TestChord(unittest.TestCase):
         closest_node = node.findSuccessor(key)
         self.assertEqual(closest_node.identifier, 3)
 
+    def test_predecessor_case(self):
+        node = self.NODES[2]
+
+        key = 1
+        self.assertTrue(node.isValid((7, 3), key))
+        closest_node = node.findPredecessor(key)
+        self.assertEqual(closest_node.identifier, 0)
+
     def test_empty_finger_table(self):
         # Create a node with an empty finger table
-        node = Node(0)
+        node = Node(2)
 
         # Ensure the finger table is initially empty
         self.assertEqual(len(node.fingerTable), 0)
@@ -86,7 +89,7 @@ class TestChord(unittest.TestCase):
 
     def test_node_with_identical_successor_predecessor(self):
         NODES = [self.NODES[0],self.NODES[2]]
-        print('\n', NODES)
+        # print('\n', NODES)
 
         NODES[0].fingerTable[0].successor = NODES[1]
         NODES[0].fingerTable[1].successor = NODES[1]
