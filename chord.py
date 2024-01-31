@@ -262,7 +262,11 @@ if __name__ == '__main__':
 	newNode.updateOthers()
 
 
-
+	newNode = Node(4)
+	newNode.initializeFingetTableStartInterval(3)
+	newNode.join(NODES[1])
+	NODES.append(newNode)
+	newNode.updateOthers()
 	temp = NODES[1]
 
 	# while (temp):
